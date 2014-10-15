@@ -44,23 +44,16 @@ var Data = {
   },
 
   componentWillMount: function () {
-    var componentName = this.constructor.displayName;
-
-    invariant(
-      this.constructor.dataTypes,
-      '%s does not declare any static dataTypes',
-      componentName
-    );
-
     invariant(
       this.constructor.getDataKeys,
       '%s is missing a static getDataKeys method',
-      componentName
+      this.constructor.displayName
     );
 
-    var dataKeys = this.constructor.getDataKeys(this.context.activeParams, this.context.activeQuery);
-
-    this.data = this._processData(this.context.data, dataKeys);
+    this.data = this._processData(
+      this.context.data,
+      this.constructor.getDataKeys(this.context.activeParams, this.context.activeQuery)
+    );
   }
 
 };
