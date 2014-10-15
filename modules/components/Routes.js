@@ -4,6 +4,7 @@ var invariant = require('react/lib/invariant');
 var copyProperties = require('react/lib/copyProperties');
 var HashLocation = require('../locations/HashLocation');
 var ActiveContext = require('../mixins/ActiveContext');
+var DataContext = require('../mixins/DataContext');
 var LocationContext = require('../mixins/LocationContext');
 var RouteContext = require('../mixins/RouteContext');
 var ScrollContext = require('../mixins/ScrollContext');
@@ -214,7 +215,7 @@ var Routes = React.createClass({
 
   displayName: 'Routes',
 
-  mixins: [ RouteContext, ActiveContext, LocationContext, ScrollContext ],
+  mixins: [ RouteContext, DataContext, ActiveContext, ScrollContext, LocationContext ],
 
   propTypes: {
     initialPath: React.PropTypes.string,
@@ -370,6 +371,20 @@ var Routes = React.createClass({
         var routes = matches.map(function (match) {
           return match.route;
         });
+
+        // TODO: We need to fetch the data here and put it into
+        // the nextState arg for ServerRendering. But we don't
+        // want to wait for it to resolve on the client, so this
+        // may need a little refactoring.
+
+        // var handlers = nextState.matches.map(function (match) {
+        //   return match.route.props.handler;
+        // });
+
+        // this._updateData(handlers, nextState.activeParams, nextState.activeQuery, function (error) {
+        //   if (error)
+        //     this.props.onError.call(this, error);
+        // });
 
         callback.call(callbackScope, null, null, {
           path: path,
