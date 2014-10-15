@@ -7,6 +7,7 @@ exports.Routes = require('./components/Routes');
 
 exports.ActiveState = require('./mixins/ActiveState');
 exports.CurrentPath = require('./mixins/CurrentPath');
+exports.Data = require('./mixins/Data');
 exports.Navigation = require('./mixins/Navigation');
 
 exports.renderRoutesToString = require('./utils/ServerRendering').renderRoutesToString;
