@@ -3,10 +3,13 @@ var merge = require('react/lib/merge');
 var invariant = require('react/lib/invariant');
 
 /**
- * A mixin for components that manage data fetching. Components
+ * A mixin for components that manage data resolution. Components
  * that use this mixin get a dataSource prop, which is a function
- * that is used to fetch the data that is needed for a given set
- * of routes.
+ * that is used to resolve a set of keys to data.
+ *
+ * Example:
+ *
+
  */
 var DataContext = {
 

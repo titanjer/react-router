@@ -1,16 +1,37 @@
 var React = require('react');
-var invariant = require('react/lib/invariant');
 var warning = require('react/lib/warning');
 
 /**
- * A mixin for route handler components that need to load data.
+ * A mixin for components that need to load data from the
+ * current route.
+ *
+ * Example:
+ *
+ *   var PostPage = React.createClass({
+ *
+ *     mixins: [ Router.Data ],
+ *
+ *     dataTypes: {
+ *       post: React.PropTypes.instanceOf(BlogPost),
+ *       comments: React.PropTypes.array
+ *     },
+ *
+ *     render: function () {
+ *       var post = this.data.post;
+ *       var comments = this.data.comments;
+ *   
+ *       // ...
+ *     }
+ *
+ *   });
  */
 var Data = {
 
   contextTypes: {
     activeParams: React.PropTypes.object.isRequired,
     activeQuery: React.PropTypes.object.isRequired,
-    data: React.PropTypes.object.isRequired
+    data: React.PropTypes.object.isRequired,
+    getDataKeys: React.PropTypes.func.isRequired
   },
 
   _checkDataTypes: function (dataTypes, data) {
@@ -29,7 +50,7 @@ var Data = {
 
   _processData: function (data, keys) {
     var maskedData = null;
-    var dataTypes = this.constructor.dataTypes;
+    var dataTypes = this.dataTypes;
 
     if (dataTypes) {
       maskedData = {};
@@ -44,15 +65,9 @@ var Data = {
   },
 
   componentWillMount: function () {
-    invariant(
-      this.constructor.getDataKeys,
-      '%s is missing a static getDataKeys method',
-      this.constructor.displayName
-    );
-
     this.data = this._processData(
       this.context.data,
-      this.constructor.getDataKeys(this.context.activeParams, this.context.activeQuery)
+      this.context.getDataKeys(this.context.activeParams, this.context.activeQuery)
     );
   }
 
