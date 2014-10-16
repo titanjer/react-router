@@ -4,15 +4,13 @@ var React = require('react/addons');
 var ReactTestUtils = React.addons.TestUtils;
 var Routes = require('../../components/Routes');
 var Route = require('../../components/Route');
+var DataProvider = require('../DataProvider');
 var Data = require('../Data');
 
 describe('Data', function () {
   var Home = React.createClass({
-    mixins: [ Data ],
+    mixins: [ DataProvider ],
     statics: {
-      dataTypes: {
-        username: React.PropTypes.string
-      },
       getDataKeys: function (params, query) {
         return {
           username: params.username
@@ -20,16 +18,17 @@ describe('Data', function () {
       }
     },
     render: function () {
-      return ProfileWidget({ username: this.data.username });
+      return ProfileWidget();
     }
   });
 
   var ProfileWidget = React.createClass({
-    propTypes: {
+    mixins: [ Data ],
+    dataTypes: {
       username: React.PropTypes.string
     },
     render: function () {
-      return React.DOM.div(null, 'Hello ' + (this.props.username || 'unknown') + '!');
+      return React.DOM.div(null, 'Hello ' + (this.data.username || 'unknown') + '!');
     }
   });
 
@@ -52,7 +51,6 @@ describe('Data', function () {
         )
       );
 
-      component.dispatch('/mjackson', done);
       component.dispatch('/home/mjackson', function (error, abortReason, nextState) {
         expect(error).toBe(null);
         expect(abortReason).toBe(null);
